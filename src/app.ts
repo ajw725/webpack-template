@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { plainToClass } from 'class-transformer';
+import { validate } from 'class-validator';
 
 import { Product } from './product.model';
 
@@ -19,3 +20,13 @@ const typedProducts = products.map((p) => new Product(p.title, p.price));
 // or we could use the class-transformer package (works for TS or vanilla JS)
 const transformed = plainToClass(Product, products);
 transformed.forEach((p) => console.log(p.getInformation()));
+
+// validating with class-validator
+const newProduct = new Product('', -5.99);
+validate(newProduct).then((errors) => {
+  if (errors.length > 0) {
+    console.log('ERRORS DETECTED');
+    console.log(errors);
+  }
+});
+console.log(newProduct.getInformation());
